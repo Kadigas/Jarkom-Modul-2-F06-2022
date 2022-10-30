@@ -1,7 +1,17 @@
 # Jarkom-Modul-2-F06-2022
 
-(1)
-OSTANIA CONFIG:
+## Kelompok F06
+
+|               Nama               |      NRP      |
+| -------------------------------- | ------------- |
+| Benedictus Bimo Cahyo Wicaksono  |  5025201097   |  
+| Andhika Ditya Bagaskara D.       |  5025201096   |
+| Theresia Nawangsih               |  5025201144   |
+
+# Soal 1
+### WISE akan dijadikan sebagai DNS Master, Berlint akan dijadikan DNS Slave, dan Eden akan digunakan sebagai Web Server. Terdapat 2 Client yaitu SSS, dan Garden. Semua node terhubung pada router Ostania, sehingga dapat mengakses internet.
+
+Digunakan OSTANIA sebagai router network configuration, OSTANIA CONFIG:
 ```
 auto eth0
 iface eth0 inet dhcp
@@ -22,12 +32,16 @@ iface eth3 inet static
 	netmask 255.255.255.0
 ```
 
-```bash
+Kemudian setup iptables
+```
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.202.0.0/16
 cat /etc/resolv.conf
 ```
+<p align="center">
+  <img src="images/1-1.png" width="600">
+</p><br>
 
-SSS CONFIG:
+SSS sebagai client, SSS CONFIG:
 ```
 auto eth0
 iface eth0 inet static
@@ -36,7 +50,7 @@ iface eth0 inet static
 	gateway 192.202.1.1
 ```
 
-Garden CONFIG:
+Garden sebagai client, Garden CONFIG:
 ```
 auto eth0
 iface eth0 inet static
@@ -45,7 +59,7 @@ iface eth0 inet static
 	gateway 192.202.1.1
 ```
 
-Berlint CONFIG:
+Berlint sebagai DNS slave network configuration, Berlint CONFIG:
 ```
 auto eth0
 iface eth0 inet static
@@ -54,7 +68,7 @@ iface eth0 inet static
 	gateway 192.202.2.1
 ```
 
-Eden CONFIG:
+Eden sebagai web server network configuration, Eden CONFIG:
 ```
 auto eth0
 iface eth0 inet static
@@ -63,7 +77,7 @@ iface eth0 inet static
 	gateway 192.202.2.1
 ```
 
-WISE CONFIG:
+WISE sebagai DNS master network configuration, WISE CONFIG:
 ```
 # Static config for eth0
 auto eth0
@@ -78,15 +92,20 @@ ALL
 echo nameserver 192.168.122.1 > /etc/resolv.conf
 ping google.com
 ```
+<p align="center">
+  <img src="images/1-2.png" width="600">
+</p><br>
 
-(2)
-WISE & BERLINT
+# Soal 2
+### Untuk mempermudah mendapatkan informasi mengenai misi dari Handler, bantulah Loid membuat website utama dengan akses wise.yyy.com dengan alias www.wise.yyy.com pada folder wise.
+
+Install bind9 pada WISE & BERLINT
 ```bash
 apt-get update
 apt-get install bind9 -y
 ```
 
-WISE
+Pada WISE, jalankan perintah berikut
 ```bash
 nano /etc/bind/named.conf.local :
 zone "wise.f06.com" {
@@ -94,10 +113,12 @@ zone "wise.f06.com" {
     file "/etc/bind/wise/wise.f06.com";
 };
 ```
+Buat folder `/etc/bind/wise` dan copy isi dari file `/etc/bind/db.local/` ke `/etc/bind/wise/wise.f06.com`
 ```bash
 mkdir /etc/bind/wise
 cp /etc/bind/db.local /etc/bind/wise/wise.f06.com
 ```
+Jalankan perintah nano dan isikan file `wise.f06.com` dengan configuration sebagai berikut
 ```bash
 nano /etc/bind/wise/wise.f06.com
 ```
@@ -118,21 +139,28 @@ $TTL    604800
 www     IN      CNAME   wise.f06.com.
 @       IN      AAAA    ::1
 ```
-
+<p align="center">
+  <img src="images/2-1.png" width="600">
+</p><br>
+Setelah mengubah konfigurasi, lakukan restart bind9
 ```bash
 service bind9 restart
 ```
-
-SSS & Garden
+Jalankan perintah berikut di client SSS & Garden
 ```bash
 nano /etc/resolv.conf
 ```
 ```
 nameserver 192.202.3.2
 ```
+<p align="center">
+  <img src="images/2-2.png" width="600">
+</p><br>
 
-(3)
-WISE
+# Soal 3
+### Setelah itu ia juga ingin membuat subdomain eden.wise.yyy.com dengan alias www.eden.wise.yyy.com yang diatur DNS-nya di WISE dan mengarah ke Eden.
+
+Jalankan perintah untuk mengubah isi dari file `wise.f06.com` dan masukkan konfigurasi sebagai berikut di WISE
 ```bash
 nano /etc/bind/wise/wise.f06.com
 ```
@@ -155,12 +183,19 @@ eden            IN      A       192.202.2.3     ; IP Eden
 www.eden        IN      CNAME   eden.wise.f06.com.
 @               IN      AAAA    ::1
 ```
+<p align="center">
+  <img src="images/3-1.png" width="600">
+</p><br>
+Lakukan restart bind9
+
 ```bash
 service restart bind9
 ```
 
-(4)
-WISE
+# Soal 4
+### Buat juga reverse domain untuk domain utama.
+
+Pada terminal WISE, jalankan perintah sebagai berikut
 ```bash
 nano /etc/bind/named.conf.local
 ```
@@ -175,6 +210,11 @@ zone "2.202.192.in-addr.arpa" {
     file "/etc/bind/wise/2.202.192.in-addr.arpa";
 };
 ```
+<p align="center">
+  <img src="images/4-1.png" width="600">
+</p><br>
+
+Kemudian jalankan perintah untuk mengubah isi file `3.202.192.in-addr.arpa`
 ```bash
 cp /etc/bind/db.local /etc/bind/wise/3.202.192.in-addr.arpa
 nano /etc/bind/wise/3.202.192.in-addr.arpa
@@ -194,20 +234,28 @@ $TTL    604800
 2.202.192.in-addr.arpa. IN      NS      wise.f06.com.
 3                       IN      PTR     wise.f06.com.
 ```
+<p align="center">
+  <img src="images/4-2.png" width="600">
+</p><br>
+
+Lakukan restart bind9
 ```bash
 service bind9 restart
 ```
-CLIENT
+Pada client, lakukan instalasi dnsutils
 ```bash
 apt-get update
 apt-get install dnsutils
 ```
+Kemudian jalankan perintah sebagai berikut
 ```bash
 host -t PTR 192.202.3.2
 ```
 
-(5)
-WISE
+# Soal 5
+### Agar dapat tetap dihubungi jika server WISE bermasalah, buatlah juga Berlint sebagai DNS Slave untuk domain utama.
+
+Jalankan perintah berikut di WISE untuk mengubah isi `named.conf.local`
 ```bash
 nano /etc/bind/named.conf.local
 ```
@@ -220,11 +268,16 @@ zone "wise.f06.com" {
     file "/etc/bind/wise/wise.f06.com";
 };
 ```
+<p align="center">
+  <img src="images/5-1.png" width="600">
+</p><br>
+
+Lakukan restart bind9
 ```bash
 service bind9 restart
 ```
 
-Berlint
+Pada Berlint, ubah isi file `named.conf.local`
 ```bash
 nano /etc/bind/named.conf.local
 ```
@@ -235,14 +288,21 @@ zone "wise.f06.com" {
     file "/var/lib/bind/wise.f06.com";
 };
 ```
+<p align="center">
+  <img src="images/5-2.png" width="600">
+</p><br>
+
+Lakukan restart bind9
 ```bash
 service bind9 restart
 ```
-WISE
+
+Hentikan bind9 pada WISE
 ```bash
 service bind9 stop
 ```
-CLIENT
+
+Jalankan perintah berikut pada CLIENT
 ```bash
 nano /etc/resolv.conf
 ```
@@ -250,12 +310,18 @@ nano /etc/resolv.conf
 nameserver 192.202.3.2
 nameserver 192.202.2.2
 ```
+Kemudian lakukan ping pada `wise.f06.com`
 ```bash
 ping wise.f06.com
 ```
+<p align="center">
+  <img src="images/5-3.png" width="600">
+</p><br>
 
-(6)
-WISE
+# Soal 6
+### Karena banyak informasi dari Handler, buatlah subdomain yang khusus untuk operation yaitu operation.wise.yyy.com dengan alias www.operation.wise.yyy.com yang didelegasikan dari WISE ke Berlint dengan IP menuju ke Eden dalam folder operation.
+
+Pada terminal WISE, isikan `wise.f06.com` dengan konfigurasi sebagai berikut
 ```bash
 nano /etc/bind/wise/wise.f06.com
 ```
@@ -280,6 +346,11 @@ ns1             IN      A       192.202.2.2     ; IP Berlint
 operation       IN      NS      ns1
 @               IN      AAAA    ::1
 ```
+<p align="center">
+  <img src="images/6-1.png" width="600">
+</p><br>
+
+Kemudian jalankan perintah berikut
 ```bash
 nano /etc/bind/named.conf.options
 ```
@@ -287,7 +358,7 @@ nano /etc/bind/named.conf.options
 allow-query{any;};
 ```
 
-TAMBAHAN: FORWARDERS -> WISE
+Lakukan penambahan: FORWARDERS -> WISE dan jalankan perintah 
 ```bash
 nano /etc/bind/named.conf.options
 ```
@@ -296,11 +367,16 @@ forwarders {
     192.168.122.1;
 };
 ```
+<p align="center">
+  <img src="images/6-1.png" width="600">
+</p><br>
+
+Lakukan restart bind9
 ```bash
 service bind9 restart
 ```
 
-Berlint
+Pada terminal Berlint, jalankan perintah sebagai berikut
 ```bash
 nano /etc/bind/named.conf.options
 ```
@@ -316,6 +392,11 @@ zone "operation.wise.f06.com" {
     file "/etc/bind/operation/operation.wise.f06.com";
 };
 ```
+<p align="center">
+  <img src="images/6-3.png" width="600">
+</p><br>
+
+Kemudian buat folder `/etc/bind/operation` dan lakukan pembuatan file `operation.wise.f06.com` dan isikan konfigurasi sebagai berikut
 ```bash
 mkdir /etc/bind/operation 
 nano /etc/bind/operation/operation.wise.f06.com
@@ -336,11 +417,19 @@ $TTL    604800
 @       IN      A       192.202.2.3     ; IP Eden
 www     IN      CNAME   operation.wise.f06.com.
 ```
+<p align="center">
+  <img src="images/6-4.png" width="600">
+</p><br>
+
+Lakukan restart bind9
 ```bash
 service bind9 restart
 ```
-(7)
-Berlint
+
+# Soal 7
+### Untuk informasi yang lebih spesifik mengenai Operation Strix, buatlah subdomain melalui Berlint dengan akses strix.operation.wise.yyy.com dengan alias www.strix.operation.wise.yyy.com yang mengarah ke Eden.
+
+Pada terminal Berlint, tambahkan konfigurasi pada `operation.wise.f06.com`
 ```bash
 nano /etc/bind/operation/operation.wise.f06.com
 ```
@@ -362,15 +451,20 @@ www             IN      CNAME   operation.wise.f06.com.
 strix           IN      A       192.202.2.3     ; IP Eden
 www.strix       IN      CNAME   strix.operation.wise.f06.com.
 ```
+<p align="center">
+  <img src="images/7-1.png" width="600">
+</p><br>
 
-(8)
-Client
+# Soal 8
+### Setelah melakukan konfigurasi server, maka dilakukan konfigurasi Webserver. Pertama dengan webserver www.wise.yyy.com. Pertama, Loid membutuhkan webserver dengan DocumentRoot pada /var/www/wise.yyy.com.
+
+Pada client, lakukan instalasi `lynx`
 ```bash
 apt-get update
 apt-get install lynx
 ```
 
-Eden
+Pada server Eden, lakukan instalasi `apache2`, `php`, dan juga `libapache2-mod-php7.0`
 ```bash
 apt-get update
 apt-get install apache2
@@ -378,28 +472,32 @@ service apache2 start
 apt-get install php
 apt-get install libapache2-mod-php7.0
 ```
+
+Buat folder di `/var/www/wise.f06.com` dan copy file `000-default.conf` sebagai `wise.f06.com.conf` dengan perintah berikut. Kemudian sesuaikan konfigurasi pada `wise.f06.com.conf`
 ```bash
-nano /etc/apache2/sites-available/000-default.conf
-```
-```bash
-/var/www/wise.f06.com
-```
-```bash
-service apache2 restart
-cd /var/www/
 mkdir /var/www/wise.f06.com
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/wise.f06.com.conf
 nano /etc/apache2/sites-available/wise.f06.com.conf
 ```
+<p align="center">
+  <img src="images/8-1.png" width="600">
+</p><br>
 ```
 ServerAdmin webmaster@localhost
 DocumentRoot /var/www/wise.f06.com
 ServerName wise.f06.com
 ServerAlias www.wise.f06.com
 ```
+<p align="center">
+  <img src="images/8-2.png" width="600">
+</p><br>
+
+Hentikan `000-default.conf` dan jalankan `wise.f06.com`
 ```bash
+a2dissite 000-default.conf
 a2ensite wise.f06.com.conf
 ```
+Download file .zip yang diperlukan dan lakukan unzip serta copy hasil dari unzip `wise.zip` kedalam `/var/www/wise.f06.com`. Kemudian lakukan restart apache2
 ```bash
 wget https://raw.github.com/theresianwg/pratikum-jarkom-modul-2/main/eden.wise.zip
 wget https://raw.github.com/theresianwg/pratikum-jarkom-modul-2/main/strix.operation.wise.zip
@@ -410,10 +508,14 @@ cp -r ~/wise/. /var/www/wise.f06.com/
 service apache2 restart
 ```
 
-Client
+Pada terminal client, buka `wise.f06.com` dengan `lynx`
 ```bash
 lynx wise.f06.com
 ```
+<p align="center">
+  <img src="images/8-3.png" width="600">
+</p><br>
+
 # Soal 10
 ### Setelah itu, pada subdomain `www.eden.wise.yyy.com` , Loid membutuhkan penyimpanan aset yang memiliki DocumentRoot pada `/var/www/eden.wise.yyy.com`
 
