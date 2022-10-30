@@ -414,50 +414,50 @@ Client
 ```bash
 lynx wise.f06.com
 ```
-(10)
-Eden
-```bash
+# Soal 10
+### Setelah itu, pada subdomain `www.eden.wise.yyy.com` , Loid membutuhkan penyimpanan aset yang memiliki DocumentRoot pada `/var/www/eden.wise.yyy.com`
+
+Pertama pada Server Eden, mengkonfigurasi file menggunakan 
+```
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/eden.wise.f06.com.conf
 nano /etc/apache2/sites-available/eden.wise.f06.com.conf
 ```
+dengan
 ```
 ServerAdmin webmaster@localhost
 DocumentRoot /var/www/eden.wise.f06.com
 ServerName eden.wise.f06.com
 ServerAlias www.eden.wise.f06.com
 ```
-```bash
-a2ensite eden.wise.f06.com.conf
+lalu membuat documentroot pada `/var/www/eden.wise.f06.com` , dilanjutkan mengaktifkan virtualhost menggunakan a2ensite
+
+```a2ensite eden.wise.f06.com.conf
 service apache2 reload
 ```
-```bash
+melakukan copy content ke documentroot menggunakan 
+```
 unzip ~/eden.wise.zip
 cp ~/eden.wise/. /var/www/eden.wise.f06.com/
 service apache2 restart
 ```
+### Testing 
+Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan ```lynx eden.wise.f06.com```
 
-Client
-```bash
-lynx eden.wise.f06.com
-```
 
-(11)
-Eden
-```bash
-nano /etc/apache2/sites-available/eden.wise.f06.com.conf
-```
+# Soal 11
+### Akan tetapi, pada folder `/public`, Loid ingin hanya dapat melakukan directory listing saja
+
+Pertama pada Server Eden, mengkonfigurasi file dapat menggunakan `nano /etc/apache2/sites-available/eden.wise.f06.com.conf`
+Selanjutnya, menambahkan Options + Indeks pada direktori yang ingin di list
 ```
 <Directory /var/www/eden.wise.f06.com/public>
     Options +Indexes
 </Directory>
 ```
-```bash
-service apache2 restart
-```
+Lalu melakukan `service apache2 restart`
 
-Client
-```bash
-lynx eden.wise.f06.com/public
+### Testing 
+Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx eden.wise.f06.com/public`
 ```
 
 (12)
