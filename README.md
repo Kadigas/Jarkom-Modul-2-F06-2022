@@ -214,10 +214,10 @@ zone "2.202.192.in-addr.arpa" {
   <img src="images/4-1.png" width="600">
 </p><br>
 
-Kemudian jalankan perintah untuk mengubah isi file `3.202.192.in-addr.arpa`
+Kemudian jalankan perintah untuk mengubah isi file `2.202.192.in-addr.arpa`
 ```bash
 cp /etc/bind/db.local /etc/bind/wise/3.202.192.in-addr.arpa
-nano /etc/bind/wise/3.202.192.in-addr.arpa
+nano /etc/bind/wise/2.202.192.in-addr.arpa
 ```
 ```bash
 ;
@@ -249,7 +249,7 @@ apt-get install dnsutils
 ```
 Kemudian jalankan perintah sebagai berikut
 ```bash
-host -t PTR 192.202.3.2
+host -t PTR 192.202.2.2
 ```
 
 # Soal 5
@@ -482,6 +482,7 @@ nano /etc/apache2/sites-available/wise.f06.com.conf
 <p align="center">
   <img src="images/8-1.png" width="600">
 </p><br>
+
 ```
 ServerAdmin webmaster@localhost
 DocumentRoot /var/www/wise.f06.com
