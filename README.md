@@ -1,9 +1,21 @@
 # Jarkom-Modul-2-F06-2022
 
 (1)
-OSTANIA
-CONFIG:
+OSTANIA CONFIG:
 ```
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet static
+	address 192.202.1.1
+	netmask 255.255.255.0
+
+auto eth2
+iface eth2 inet static
+	address 192.202.2.1
+	netmask 255.255.255.0
+
 auto eth3
 iface eth3 inet static
 	address 192.202.3.1
@@ -12,10 +24,46 @@ iface eth3 inet static
 
 ```bash
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.202.0.0/16
+cat /etc/resolv.conf
 ```
 
-WISE
-CONFIG:
+SSS CONFIG:
+```
+auto eth0
+iface eth0 inet static
+	address 192.202.1.2
+	netmask 255.255.255.0
+	gateway 192.202.1.1
+```
+
+Garden CONFIG:
+```
+auto eth0
+iface eth0 inet static
+	address 192.202.1.3
+	netmask 255.255.255.0
+	gateway 192.202.1.1
+```
+
+Berlint CONFIG:
+```
+auto eth0
+iface eth0 inet static
+	address 192.202.2.2
+	netmask 255.255.255.0
+	gateway 192.202.2.1
+```
+
+Eden CONFIG:
+```
+auto eth0
+iface eth0 inet static
+	address 192.202.2.3
+	netmask 255.255.255.0
+	gateway 192.202.2.1
+```
+
+WISE CONFIG:
 ```
 # Static config for eth0
 auto eth0
@@ -24,6 +72,7 @@ iface eth0 inet static
 	netmask 255.255.255.0
 	gateway 192.202.3.1
 ```
+
 ALL
 ```bash
 echo nameserver 192.168.122.1 > /etc/resolv.conf
@@ -70,7 +119,9 @@ www     IN      CNAME   wise.f06.com.
 @       IN      AAAA    ::1
 ```
 
-```service bind9 restart```
+```bash
+service bind9 restart
+```
 
 SSS & Garden
 ```bash
