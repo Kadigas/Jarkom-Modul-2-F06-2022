@@ -745,4 +745,6 @@ Lalu melakukan `service apache2 restart`
 
 ### Testing 
 Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx www.eden.wise.f06.com/public/images/eden-student.png`
-
+<p align="center">
+  <img src="images/no17.png" width="600">
+</p><br>
