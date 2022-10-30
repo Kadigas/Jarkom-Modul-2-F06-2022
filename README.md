@@ -516,6 +516,38 @@ lynx wise.f06.com
   <img src="images/8-3.png" width="600">
 </p><br>
 
+# Soal 9
+### Setelah itu, Loid juga membutuhkan agar url www.wise.yyy.com/index.php/home dapat menjadi menjadi www.wise.yyy.com/home.
+
+Pada terminal Eden, jalankan perintah untuk rewrite dan lakukan restart apache2
+```bash
+a2enmod rewrite
+service apache2 restart
+```
+Kemudian tambahkan konfigurasi berikut kedalam `/var/www/wise.f06.com/.htaccess`
+```
+nano /var/www/wise.f06.com/.htaccess :
+RewriteEngine On
+RewriteRule ^home index.php/home
+```
+Tambahkan konfigurasi berikut berikut juga kedalam `/etc/apache2/sites-available/wise.f06.com.conf`
+```
+nano /etc/apache2/sites-available/wise.f06.com.conf :
+<Directory /var/www/wise.f06.com>
+    Options +FollowSymLinks -Multiviews
+    AllowOverride All
+</Directory>
+```
+Lakukan restart apache2
+```
+service apache2 restart
+```
+
+Pada Client, buka `wise.f06.com/home` dengan `lynx`
+```
+lynx wise.f06.com/home
+```
+
 # Soal 10
 ### Setelah itu, pada subdomain `www.eden.wise.yyy.com` , Loid membutuhkan penyimpanan aset yang memiliki DocumentRoot pada `/var/www/eden.wise.yyy.com`
 
