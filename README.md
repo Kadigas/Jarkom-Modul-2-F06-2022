@@ -576,6 +576,9 @@ service apache2 restart
 ```
 ### Testing 
 Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan ```lynx eden.wise.f06.com```
+<p align="center">
+  <img src="images/no10.png" width="600">
+</p><br>
 
 
 # Soal 11
@@ -592,6 +595,9 @@ Lalu melakukan `service apache2 restart`
 
 ### Testing 
 Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx eden.wise.f06.com/public`
+<p align="center">
+  <img src="images/no11.png" width="600">
+</p><br>
 
 # Soal 12
 ### Tidak hanya itu, Loid juga ingin menyiapkan error file 404.html pada folder `/error` untuk mengganti error kode pada apache 
@@ -607,6 +613,9 @@ Lalu melakukan `service apache2 restart`
 
 ### Testing 
 Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx eden.wise.f06.com/test`
+<p align="center">
+  <img src="images/no12.png" width="600">
+</p><br>
 
 # Soal 13
 ### Loid juga meminta Franky untuk dibuatkan konfigurasi virtual host. Virtual host ini bertujuan untuk dapat mengakses file asset `www.eden.wise.yyy.com/public/js` menjadi `www.eden.wise.yyy.com/js`
@@ -620,6 +629,9 @@ Lalu melakukan `service apache2 restart`
 
 ### Testing 
 Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx eden.wise.f06.com/js`
+<p align="center">
+  <img src="images/no13.png" width="600">
+</p><br>
 
 # Soal 14
 ### Loid meminta agar www.strix.operation.wise.yyy.com hanya bisa diakses dengan port `15000` dan port `15500` 
@@ -705,6 +717,12 @@ Lalu melakukan `service apache2 restart`
 
 ### Testing 
 Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx 192.202.2.3`
+<p align="center">
+  <img src="images/no16-1.png" width="600">
+</p><br>
+<p align="center">
+  <img src="images/no16-2.png" width="600">
+</p><br>
 
 
 # Soal 17
