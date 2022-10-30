@@ -574,6 +574,9 @@ nano /etc/apache2/sites-available/000-default.conf
     AllowOverride All
 </Directory>
 ```
+```bash
+service apache2 restart
+```
 
 Client
 ```bash
@@ -581,3 +584,28 @@ lynx 192.202.2.3
 ```
 
 (17)
+```bash
+nano /var/www/eden.wise.f06.com/public/images/.htaccess
+```
+```
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/public/images/(.*)eden(.*)
+RewriteRule eden http://eden.wise.f06.com/public/images/eden.png$1 [L,R=301]
+```
+```bash
+nano /etc/apache2/sites-available/eden.wise.f06.com.conf
+```
+```
+<Directory /var/www/eden.wise.f06.com/public/images>
+    Options +FollowSymLinks -Multiviews +Indexes
+    AllowOverride All
+</Directory>
+```
+```bash
+service apache2 restart
+```
+
+Client:
+```bash
+lynx www.eden.wise.f06.com/public/images/eden-student.png
+```
