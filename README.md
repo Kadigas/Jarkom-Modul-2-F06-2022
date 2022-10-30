@@ -422,7 +422,7 @@ Pertama pada Server Eden, mengkonfigurasi file menggunakan
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/eden.wise.f06.com.conf
 nano /etc/apache2/sites-available/eden.wise.f06.com.conf
 ```
-dengan
+dan juga
 ```
 ServerAdmin webmaster@localhost
 DocumentRoot /var/www/eden.wise.f06.com
@@ -430,8 +430,8 @@ ServerName eden.wise.f06.com
 ServerAlias www.eden.wise.f06.com
 ```
 lalu membuat documentroot pada `/var/www/eden.wise.f06.com` , dilanjutkan mengaktifkan virtualhost menggunakan a2ensite
-
-```a2ensite eden.wise.f06.com.conf
+```
+a2ensite eden.wise.f06.com.conf
 service apache2 reload
 ```
 melakukan copy content ke documentroot menggunakan 
@@ -458,44 +458,44 @@ Lalu melakukan `service apache2 restart`
 
 ### Testing 
 Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx eden.wise.f06.com/public`
-```
 
-(12)
-Eden
-```bash
-nano /etc/apache2/sites-available/eden.wise.f06.com.conf
-```
+# Soal 12
+### Tidak hanya itu, Loid juga ingin menyiapkan error file 404.html pada folder `/error` untuk mengganti error kode pada apache 
+
+Pertama pada Server Eden, mengkonfigurasi file dapat menggunakan `nano /etc/apache2/sites-available/eden.wise.f06.com.conf`
+Dilanjutkan, dengan menambahkan konfigurasi `ErrorDocument` pada setiap error yang mengarah pada file `/error/404.html`
 ```
 <Directory /var/www/eden.wise.f06.com>
     ErrorDocument 404 /error/404.html
 </Directory>
 ```
+Lalu melakukan `service apache2 restart`
 
-CLIENT
-```bash
-lynx eden.wise.f06.com/test
-```
+### Testing 
+Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx eden.wise.f06.com/test`
 
-(13)
-Eden
-```bash
-nano /etc/apache2/sites-available/eden.wise.f06.com.conf
-```
+# Soal 13
+### Loid juga meminta Franky untuk dibuatkan konfigurasi virtual host. Virtual host ini bertujuan untuk dapat mengakses file asset `www.eden.wise.yyy.com/public/js` menjadi `www.eden.wise.yyy.com/js`
+
+Pertama pada Server Eden, mengkonfigurasi file dapat menggunakan `nano /etc/apache2/sites-available/eden.wise.f06.com.conf`
+Lalu untuk menambahkan konfigurasi Alias, menggunakan
 ```
 Alias "/js" "/var/www/eden.wise.f06.com/public/js"
 ```
+Lalu melakukan `service apache2 restart`
 
-CLIENT
-```bash
-lynx eden.wise.f06.com/js
+### Testing 
+Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx eden.wise.f06.com/js`
+
+# Soal 14
+### Loid meminta agar www.strix.operation.wise.yyy.com hanya bisa diakses dengan port `15000` dan port `15500` 
+
+Pertama pada Server Eden, mengkonfigurasi file menggunakan
 ```
-
-(14)
-Eden
-```bash
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/strix.operation.wise.f06.com.conf
 nano /etc/apache2/sites-available/strix.operation.wise.f06.com.conf
 ```
+lalu menambahkan VirtualHost baru pada port `15000` dan port `15500` 
 ```
 <VirtualHost *:15000 *:15500>
         ServerAdmin webmaster@localhost
@@ -507,36 +507,36 @@ nano /etc/apache2/sites-available/strix.operation.wise.f06.com.conf
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 ```
-```bash
-nano /etc/apache2/ports.conf
-```
+Dilanjutkan, mengkonfigurasi file menggunakan `nano /etc/apache2/ports.conf `untuk menambahkan listen port `15000` dan port `15500` 
 ```
 Listen 1500
 Listen 15500
 ```
-```bash
+selanjutnya melakukan
+```
 a2ensite strix.operation.wise.f06.com.conf
 service apache2 reload
 ```
-```bash
+lalu melakukan uznip, menggunakan
+```
 unzip ~/strix.operation.wise.zip
 cp -r ~/strix.operation.wise/. /var/www/strix.operation.wise.f06.com/
-service apache2 restart
 ```
-Client
-```bash
+dan `service apache2 restart`
+
+### Testing 
+Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan
+```
 lynx strix.operation.wise.f06.com:15000
 lynx strix.operation.wise.f06.com:15500
 ```
 
-(15)
-Eden
-```bash
-htpasswd -nb Twilight opStrix > /etc/apache2/.htpasswd
-```
-```bash
-nano /etc/apache2/sites-available/strix.operation.wise.f06.com.conf
-```
+# Soal 15
+###  Dengan autentikasi username Twilight dan password opStrix dan file di `/var/www/strix.operation.wise.yyy`
+
+Pertama pada Server Eden, menjalankan command `htpasswd -nb Twilight opStrix > /etc/apache2/.htpasswd`
+lalu, mengkonfiogurasi file dengan `nano /etc/apache2/sites-available/strix.operation.wise.f06.com.conf`. 
+Dan juga pada `/var/www/strix.operation.wise.f06.com`
 ```
 <Directory /var/www/strix.operation.wise.f06.com>
     AuthType Basic
@@ -545,67 +545,51 @@ nano /etc/apache2/sites-available/strix.operation.wise.f06.com.conf
     Require valid-user
 </Directory>
 ```
-```bash
-service apache2 restart
-```
+Lalu melakukan `service apache2 restart`
 
-CLIENT
-```bash
-lynx strix.operation.wise.f06.com:15000
-```
+### Testing 
+Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx strix.operation.wise.f06.com:15000`
 
-(16)
-Eden
-```bash
-nano /var/www/html/.htaccess
-```
+# Soal 16
+### Dan setiap kali mengakses IP Eden akan dialihkan secara otomatis ke `www.wise.yyy.com`
+
+Pertama pada Server Eden, mengkonfigurasi file menggunakan `nano /var/www/html/.htaccess` lalu, dapat menambahkan
 ```
 RewriteEngine On
 RewriteBase /
 RewriteCond %{HTTP_HOST} ^192\.202\.2\.3$
 RewriteRule ^(.*)$ http://wise.f06.com/$1 [L,R=301]
 ```
-```bash
-nano /etc/apache2/sites-available/000-default.conf
-```
+Dilanjutkan dengan `nano /etc/apache2/sites-available/000-default.conf` dan menambahkan
 ```
 <Directory /var/www/html>
     Options +FollowSymLinks -Multiviews
     AllowOverride All
 </Directory>
 ```
-```bash
-service apache2 restart
-```
+Lalu melakukan `service apache2 restart`
 
-Client
-```bash
-lynx 192.202.2.3
-```
+### Testing 
+Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx 192.202.2.3`
 
-(17)
-```bash
-nano /var/www/eden.wise.f06.com/public/images/.htaccess
-```
+
+# Soal 17
+### Karena website `www.eden.wise.yyy.com` semakin banyak pengunjung dan banyak modifikasi sehingga banyak gambar-gambar yang random, maka Loid ingin mengubah request gambar yang memiliki substring “eden” akan diarahkan menuju eden.png. Bantulah Agent Twilight dan Organisasi WISE menjaga perdamaian! 
+
+Pertama pada Server Eden, mengkonfigurasi dengan `nano /var/www/eden.wise.f06.com/public/images/.htaccess`, lalu menambahkan
 ```
 RewriteEngine On
 RewriteCond %{REQUEST_URI} ^/public/images/(.*)eden(.*)
 RewriteRule eden http://eden.wise.f06.com/public/images/eden.png$1 [L,R=301]
 ```
-```bash
-nano /etc/apache2/sites-available/eden.wise.f06.com.conf
-```
-```
-<Directory /var/www/eden.wise.f06.com/public/images>
+Selanjutnya, mengkonfigurasi file menggunakan `nano /etc/apache2/sites-available/eden.wise.f06.com.conf` dan
+```<Directory /var/www/eden.wise.f06.com/public/images>
     Options +FollowSymLinks -Multiviews +Indexes
     AllowOverride All
 </Directory>
 ```
-```bash
-service apache2 restart
-```
+Lalu melakukan `service apache2 restart`
 
-Client:
-```bash
-lynx www.eden.wise.f06.com/public/images/eden-student.png
-```
+### Testing 
+Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx www.eden.wise.f06.com/public/images/eden-student.png`
+
