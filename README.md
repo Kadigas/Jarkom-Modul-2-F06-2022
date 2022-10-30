@@ -744,7 +744,10 @@ Selanjutnya, mengkonfigurasi file menggunakan `nano /etc/apache2/sites-available
 Lalu melakukan `service apache2 restart`
 
 ### Testing 
-Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx www.eden.wise.f06.com/public/images/eden-student.png`
+Pada client yaitu SSS atau Garden kita dapat melakukan testing menggunakan `lynx www.eden.wise.f06.com/public/images/eden-student.jpg` dan  `lynx www.eden.wise.f06.com/public/images/eden.png`
 <p align="center">
-  <img src="images/no17.png" width="600">
+  <img src="images/no17-1.png" width="600">
+</p><br>
+<p align="center">
+  <img src="images/no17-2.png" width="600">
 </p><br>
