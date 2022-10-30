@@ -354,7 +354,8 @@ wget https://raw.github.com/theresianwg/pratikum-jarkom-modul-2/main/eden.wise.z
 wget https://raw.github.com/theresianwg/pratikum-jarkom-modul-2/main/strix.operation.wise.zip
 wget https://raw.github.com/theresianwg/pratikum-jarkom-modul-2/main/wise.zip
 
-unzip -j ~/wise.zip -d /var/www/wise.f06.com/
+unzip ~/wise.zip
+cp -r ~/wise/. /var/www/wise.f06.com/
 service apache2 restart
 ```
 
@@ -362,3 +363,170 @@ Client
 ```bash
 lynx wise.f06.com
 ```
+(10)
+Eden
+```bash
+cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/eden.wise.f06.com.conf
+nano /etc/apache2/sites-available/eden.wise.f06.com.conf
+```
+```
+ServerAdmin webmaster@localhost
+DocumentRoot /var/www/eden.wise.f06.com
+ServerName eden.wise.f06.com
+ServerAlias www.eden.wise.f06.com
+```
+```bash
+a2ensite eden.wise.f06.com.conf
+service apache2 reload
+```
+```bash
+unzip ~/eden.wise.zip
+cp ~/eden.wise/. /var/www/eden.wise.f06.com/
+service apache2 restart
+```
+
+Client
+```bash
+lynx eden.wise.f06.com
+```
+
+(11)
+Eden
+```bash
+nano /etc/apache2/sites-available/eden.wise.f06.com.conf
+```
+```
+<Directory /var/www/eden.wise.f06.com/public>
+    Options +Indexes
+</Directory>
+```
+```bash
+service apache2 restart
+```
+
+Client
+```bash
+lynx eden.wise.f06.com/public
+```
+
+(12)
+Eden
+```bash
+nano /etc/apache2/sites-available/eden.wise.f06.com.conf
+```
+```
+<Directory /var/www/eden.wise.f06.com>
+    ErrorDocument 404 /error/404.html
+</Directory>
+```
+
+CLIENT
+```bash
+lynx eden.wise.f06.com/test
+```
+
+(13)
+Eden
+```bash
+nano /etc/apache2/sites-available/eden.wise.f06.com.conf
+```
+```
+Alias "/js" "/var/www/eden.wise.f06.com/public/js"
+```
+
+CLIENT
+```bash
+lynx eden.wise.f06.com/js
+```
+
+(14)
+Eden
+```bash
+cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/strix.operation.wise.f06.com.conf
+nano /etc/apache2/sites-available/strix.operation.wise.f06.com.conf
+```
+```
+<VirtualHost *:15000 *:15500>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/strix.operation.wise.f06.com
+        ServerName strix.operation.wise.f06.com
+        ServerAlias www.strix.operation.eden.wise.f06.com
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+```bash
+nano /etc/apache2/ports.conf
+```
+```
+Listen 1500
+Listen 15500
+```
+```bash
+a2ensite strix.operation.wise.f06.com.conf
+service apache2 reload
+```
+```bash
+unzip ~/strix.operation.wise.zip
+cp -r ~/strix.operation.wise/. /var/www/strix.operation.wise.f06.com/
+service apache2 restart
+```
+Client
+```bash
+lynx strix.operation.wise.f06.com:15000
+lynx strix.operation.wise.f06.com:15500
+```
+
+(15)
+Eden
+```bash
+htpasswd -nb Twilight opStrix > /etc/apache2/.htpasswd
+```
+```bash
+nano /etc/apache2/sites-available/strix.operation.wise.f06.com.conf
+```
+```
+<Directory /var/www/strix.operation.wise.f06.com>
+    AuthType Basic
+    AuthName "Restricted Files"
+    AuthUserFile /etc/apache2/.htpasswd
+    Require valid-user
+</Directory>
+```
+```bash
+service apache2 restart
+```
+
+CLIENT
+```bash
+lynx strix.operation.wise.f06.com:15000
+```
+
+(16)
+Eden
+```bash
+nano /var/www/html/.htaccess
+```
+```
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^192\.202\.2\.3$
+RewriteRule ^(.*)$ http://wise.f06.com/$1 [L,R=301]
+```
+```bash
+nano /etc/apache2/sites-available/000-default.conf
+```
+```
+<Directory /var/www/html>
+    Options +FollowSymLinks -Multiviews
+    AllowOverride All
+</Directory>
+```
+
+Client
+```bash
+lynx 192.202.2.3
+```
+
+(17)
